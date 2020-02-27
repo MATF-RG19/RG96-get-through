@@ -21,8 +21,10 @@ void Input::kamera_osvezi()
 	ldx = cos(yaw - M_PI_2);
 	ldz = sin(yaw - M_PI_2);
 
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	
 	gluLookAt(pos_x, pos_y, pos_z, pos_x + vecx, pos_y + vecy, pos_z + vecz, 0.0,1.0,0.0);
 
 }
@@ -70,11 +72,13 @@ void Input::pitchOkretanje(float angle)
 
 	pitch += angle;
 
-    if(pitch < -(89.0 * M_PI / 180.0))
+    if(pitch < -(89.0 * M_PI / 180.0)){
         pitch = -(89.0 * M_PI / 180.0);
+	}
 
-    if(pitch > (89.0 * M_PI / 180.0))
+    if(pitch > (89.0 * M_PI / 180.0)){
         pitch = 89.0 * M_PI / 180.0;
+	}
 
 	kamera_osvezi();
 }

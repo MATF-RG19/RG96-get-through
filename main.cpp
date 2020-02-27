@@ -1,7 +1,8 @@
-#include <GL/freeglut.h>
+#include <GL/glut.h>
 #include<cmath>
 
 #include "Input.h"
+#include "bitmaps.h"
 
 using namespace std;
 
@@ -62,7 +63,8 @@ static void on_idle(){
 }
 
 static void on_display(){
-    glClearColor(0.0,0.0,0.0,1.0); 
+
+    glClearColor(1.0,1.0,1.0,1.0); 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
@@ -78,6 +80,9 @@ static void on_display(){
         glVertex3f(-10, 0, 10);
         glVertex3f(-10, 0, -10);
     glEnd();
+
+    
+
 
     glutSwapBuffers(); 
 }

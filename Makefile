@@ -1,6 +1,6 @@
-OBJS	= main.o Input.o
-SOURCE	= main.cpp Input.cpp
-HEADER	= Input.h
+OBJS	= main.o Input.o LevelBuilder.o
+SOURCE	= main.cpp Input.cpp LevelBuilder.cpp
+HEADER	= Input.h LevelBuilder.h
 OUT	= get-through
 CC	 = g++
 FLAGS	 = -g -c -Wall 
@@ -15,6 +15,8 @@ main.o: main.cpp
 Input.o: Input.cpp
 	$(CC) $(FLAGS) Input.cpp -std=c++14
 
+LevelBuilder.o: LevelBuilder.cpp
+	$(CC) $(FLAGS) LevelBuilder.cpp -std=c++14
 
 clean:
 	rm -f $(OBJS) $(OUT)

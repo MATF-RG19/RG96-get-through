@@ -1,13 +1,15 @@
 #include <GL/glut.h>
 #include<cmath>
+#include <iostream>
+
 
 #include "Input.h"
-#include "bitmaps.h"
+#include "LevelBuilder.h"
 
 using namespace std;
 
-const float rotacionaBrzina = M_PI/180*0.2;
-const float brzinaKretanja = 0.07;
+const double rotacionaBrzina = M_PI/180*0.2;
+const double brzinaKretanja = 0.07;
 
 static void on_keyboard(unsigned char key, int x, int y);
 static void on_keyboard_up(unsigned char key, int x, int y);
@@ -29,6 +31,7 @@ int visina = 0;
 
 
 Input input;
+LevelBuilder lvl;
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);
@@ -38,17 +41,21 @@ int main(int argc, char** argv){
 
     glutCreateWindow("Get Through");
 
-    glutDisplayFunc(on_display);
-    glutReshapeFunc(on_reshape);
-    glutIdleFunc(on_idle);
     glutKeyboardFunc(on_keyboard);
     glutKeyboardUpFunc(on_keyboard_up);
     glutMouseFunc(on_mouse);
     glutMotionFunc(on_mouse_motion);
     glutPassiveMotionFunc(on_mouse_motion);
+    glutDisplayFunc(on_display);
+    glutReshapeFunc(on_reshape);
+    glutIdleFunc(on_idle);
 
     glutSetCursor(GLUT_CURSOR_NONE);
-    
+    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
+    //glEnable(GL_LIGHTING);
+    //glEnable(GL_NORMALIZE);
+    //glEnable(GL_TEXTURE_2D);
 
     glutIgnoreKeyRepeat(1);
 
@@ -64,25 +71,11 @@ static void on_idle(){
 
 static void on_display(){
 
-    glClearColor(1.0,1.0,1.0,1.0); 
+    glClearColor(1.0,1.0,1.0,0); 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-
 	input.kamera_osvezi();
 
-    glColor3f(0,1,0);
-    //glutWireTeapot(0.5);
-
-    glBegin(GL_POLYGON);
-        glColor3f(10, 0, 0);
-        glVertex3f(10, 0, -10);
-        glVertex3f(10, 0, 10);
-        glVertex3f(-10, 0, 10);
-        glVertex3f(-10, 0, -10);
-    glEnd();
-
-    
-
+    lvl.napraviNivo();
 
     glutSwapBuffers(); 
 }
@@ -94,7 +87,7 @@ static void on_reshape(int width, int height){
     glMatrixMode(GL_PROJECTION);
 
     glLoadIdentity();
-    gluPerspective(60, width/height, 0.1, 100.0);
+    gluPerspective(60, width/height, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
 }
 

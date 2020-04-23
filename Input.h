@@ -8,17 +8,18 @@ class Input
             naNule(); 
         }
 
+
         void kamera_osvezi();
         void naNule();
-        void pocetna_pozicija(float x, float y, float z);
-        void yawOkretanje(float angle);
-        void pitchOkretanje(float angle);
-        void Hodaj(float promena);
-        void LevoDesno(float promena);
+        void pocetna_pozicija(double x, double y, double z);
+        void yawOkretanje(double angle);
+        void pitchOkretanje(double angle);
+        void Hodaj(double promena);
+        void LevoDesno(double promena);
 
     private:
-        float pos_x, pos_y, pos_z, vecx, vecy, vecz, ldx, ldz;
-        float yaw, pitch; 
+        double pos_x, pos_y, pos_z, vecx, vecy, vecz, ldx, ldz;
+        double yaw, pitch; 
 };
 
 #endif

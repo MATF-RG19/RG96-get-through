@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 #include "Input.h"
 
-void Input::pocetna_pozicija(float x, float y, float z)
+void Input::pocetna_pozicija(double x, double y, double z)
 {
 	pos_x = x;
 	pos_y = y;
@@ -41,17 +41,17 @@ void Input::naNule()
 }
 
 
-void Input::Hodaj(float promena)
+void Input::Hodaj(double promena)
 {
-    float lx = cos(yaw)*cos(pitch);
-    float lz = sin(yaw)*cos(pitch);
+    double lx = cos(yaw)*cos(pitch);
+    double lz = sin(yaw)*cos(pitch);
 	pos_x = pos_x + promena*lx;
 	pos_z = pos_z + promena*lz;
 
 	kamera_osvezi();
 }
 
-void Input::LevoDesno(float promena)
+void Input::LevoDesno(double promena)
 {
 	pos_x = pos_x + promena*ldx;
 	pos_z = pos_z + promena*ldz;
@@ -59,14 +59,14 @@ void Input::LevoDesno(float promena)
 	kamera_osvezi();
 }
 
-void Input::yawOkretanje(float angle)
+void Input::yawOkretanje(double angle)
 {
 	yaw += angle;
 
 	kamera_osvezi();
 }
 
-void Input::pitchOkretanje(float angle)
+void Input::pitchOkretanje(double angle)
 {
 	
 

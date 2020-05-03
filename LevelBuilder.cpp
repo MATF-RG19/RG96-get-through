@@ -6,7 +6,7 @@
 
 
 
-static GLuint name[2];   
+static GLuint name[3];   
 float width_wall = 0.1f;
 float texture_repeat_wall = 5;
 
@@ -63,6 +63,10 @@ LevelBuilder::LevelBuilder(){
                  image->width, image->height, 0,
                  GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 
+
+
+
+    /////////////////////// 	***	  DONE 	***    //////////////////////////////////////
     glBindTexture(GL_TEXTURE_2D, 0);
 
     image_done(image);
@@ -72,7 +76,7 @@ LevelBuilder::LevelBuilder(){
 
 void LevelBuilder::napraviNivo(){
     buildFloor(40.0);
-    buildWall(0, 0, 0, false);
+    
     for(int i=20; i>=-19; i-=2){
     	if(i!=0){
     		buildWall(i, 20, 180, true);
@@ -98,6 +102,8 @@ void LevelBuilder::napraviNivo(){
     }
 
     buildWall(0, -40, 180, true);
+
+    buildBure(0, 0);
 }
 
 
@@ -171,6 +177,47 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 
 
 }
+
+ void LevelBuilder::buildBure(double posX, double posZ){
+ 	glPushMatrix();
+
+ 		glBegin(GL_QUADS);
+ 			glColor3f(0.45f, 0.45f, 0.45f);
+ 			glVertex3f(1, 0, -0.5f);
+ 			glVertex3f(1, 0, 0.5f);
+ 			glVertex3f(1, 0.8f, 0.5f);
+ 			glVertex3f(1, 0.8f, -0.5f);
+ 		glEnd();
+
+ 		glBegin(GL_QUADS);
+ 			glColor3f(0.45f, 0.45f, 0.45f);
+ 			glVertex3f(1.7f, 0, -0.5f);
+ 			glVertex3f(1.7f, 0, 0.5f);
+ 			glVertex3f(1.7f, 0.8f, 0.5f);
+ 			glVertex3f(1.7f, 0.8f, -0.5f);
+ 		glEnd();
+
+ 		glBegin(GL_QUADS);
+ 			glColor3f(0.45f, 0.45f, 0.45f);
+ 			glVertex3f(1, 0, 0.5f);
+ 			glVertex3f(1.7f, 0, 0.5f);
+ 			glVertex3f(1.7f, 0.8f, 0.5f);
+ 			glVertex3f(1, 0.8f, 0.5f);
+ 		glEnd();
+
+ 		glBegin(GL_QUADS);
+ 			glColor3f(0.45f, 0.45f, 0.45f);
+ 			glVertex3f(1, 0, -0.5f);
+ 			glVertex3f(1.7f, 0, -0.5f);
+ 			glVertex3f(1.7f, 0.8f, -0.5f);
+ 			glVertex3f(1, 0.8f, -0.5f);
+ 		glEnd();
+
+
+ 	glPopMatrix();
+
+
+ }
 
 void LevelBuilder::buildCeiling(double posX, double posZ){};
 

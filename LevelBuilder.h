@@ -15,7 +15,7 @@ public:
     void buildWall(double posX, double posZ, double rotD, bool rot);
     void buildCeiling(double posX, double posZ);
     void buildFloor(double posX);
-
+    void buildBure(double posX, double posZ);
 
 
 

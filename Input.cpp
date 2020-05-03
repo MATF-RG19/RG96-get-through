@@ -106,3 +106,25 @@ void Input::KolizijaZidovi(){
 		pos_x = -20.f+wallerr;
 	}
 }
+
+double Input::retX(){
+	return pos_x;
+}
+
+double Input::retY(){
+	return pos_y;
+}
+
+double Input::retZ(){
+	return pos_z;
+}
+
+double Input::retVx(){
+	return vecx;
+}
+double Input::retVy(){
+	return vecy;
+}
+double Input::retVz(){
+	return vecz;
+}

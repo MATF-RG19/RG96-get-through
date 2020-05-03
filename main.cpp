@@ -26,9 +26,21 @@ int sirina = 0;
 int visina = 0;
 
 
-
+//za loptu
+static int isAnimate = 0; 
+static float t = 0.0; 
+static float h = 0.2; 
+static float v = 0.7; 
+static float g = 0.1;  
 Input input;
 LevelBuilder lvl; //= new LevelBuilder();
+
+double xx = 0;
+double yy = 0;
+double zz = 0;
+
+double dirX = 0;
+double dirZ = 0;
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);
@@ -73,6 +85,12 @@ static void on_display(){
 
 	input.kamera_osvezi();
     lvl.napraviNivo();
+   
+	
+    glTranslatef(h*t+xx+1+dirX, v*t - (g/2.0)*t*t, zz+dirZ);
+
+    glColor3f(0, 0, 1);
+    glutWireSphere(0.1, 10, 10);
 
 
     glutSwapBuffers(); 
@@ -113,6 +131,21 @@ static void on_keyboard(unsigned char key, int x, int y){
         case 'l':
         	buttons_list[5] = true;
         	break;
+        case ' ':
+        	if(isAnimate) {isAnimate =0;}
+        	else {isAnimate = 1;}
+        	xx = input.retX();
+    		zz = input.retZ();
+    		dirX = input.retVx();
+    		dirZ = input.retVz();
+        	glutPostRedisplay();
+        	break;
+
+        case 'r':
+	        isAnimate = 0;
+			t = 0.0;
+	        glutPostRedisplay();
+			break;
         case 27:
             exit(EXIT_SUCCESS);
             break;
@@ -143,6 +176,7 @@ static void on_keyboard_up(unsigned char key, int x, int y){
         case 'l':
         	buttons_list[5] = false;
 
+
     }
 }
 
@@ -164,6 +198,10 @@ static void on_timer(int value){
     }
     if(buttons_list[5]){
     	input.yawOkretanje(0.1);
+    }
+
+    if(isAnimate){
+    	t += 1.0;
     }
 
     glutTimerFunc(33, on_timer, 0);

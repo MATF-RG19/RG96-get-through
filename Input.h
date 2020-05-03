@@ -16,6 +16,13 @@ class Input
         void Hodaj(double promena);
         void LevoDesno(double promena);
         void KolizijaZidovi();
+        double retX();
+        double retY();
+        double retZ();
+        double retVx();
+        double retVy();
+        double retVz();
+
 
     private:
         double pos_x, pos_y, pos_z, vecx, vecy, vecz, ldx, ldz;

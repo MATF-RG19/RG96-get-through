@@ -39,7 +39,7 @@ void Input::kamera_osvezi()
 
 void Input::naNule()
 {
-
+	izlaz = false;
 	pitch = 0;
 	yaw = 1.6f;
 	pos_x = -1;
@@ -157,7 +157,7 @@ void Input::KolizijaZidovi(){
 
 	if(pos_z > (20.f - wallerr)){  //&& pos_x < (-2.f+wallerr) && pos_x > (0.f - wallerr)
 		if(pos_x < 0 && pos_x > -2){
-			std::cout << "izlaz";
+			izlaz = true;
 		}else{
 			pos_z = (20.f - wallerr);
 		}
@@ -169,6 +169,10 @@ void Input::KolizijaZidovi(){
 	else if(pos_x < -20.f+wallerr){
 		pos_x = -20.f+wallerr;
 	}
+}
+
+bool Input::getIzlaz(){
+	return izlaz;
 }
 
 double Input::retX(){

@@ -8,7 +8,8 @@ class Input
 
 	private:
         double pos_x, pos_y, pos_z, vecx, vecy, vecz, ldx, ldz;
-        double yaw, pitch; 
+        double yaw, pitch;
+        bool izlaz; 
         float wallerr = 0.5f;
        	std::vector<std::vector<int>> pozicije_burica;
        	std::vector<bool> lopticaUBuretu;
@@ -36,6 +37,7 @@ class Input
         double retYaw();
         void upadUBure(double trX,double trY,double trZ);
         bool svaBurad();
+        bool getIzlaz();
 
 };
 

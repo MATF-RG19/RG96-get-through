@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Input.h"
 #include "LevelBuilder.h"
+#include <stdio.h>
 
 using namespace std;
 
@@ -87,44 +88,45 @@ static void on_display(){
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	input.kamera_osvezi();
-    lvl.napraviNivo();
-   
-	if(isAnimate){
-	    glPushMatrix();
-	     	glColor3f(0, 0, 1);
-	    	// h*t, v*t - (g/2.0)*t*t 
 
-	    	if(dirX > 0 && dirZ > 0){
-	    		trX = h*t+xx+1;
-	    		trY = v*t - (g/2.0)*t*t;
-	    		trZ = zz;
-		    }
-		    else if(dirX < 0 && dirZ > 0){
-		    	trX = xx;
-		    	trY = v*t - (g/2.0)*t*t;
-		    	trZ = h*t+zz+1;
-		    }
-		    else if(dirX < 0 && dirZ < 0){
-		    	trX = -h*t+xx-1;
-		    	trY = v*t - (g/2.0)*t*t;
-		    	trZ = zz;
-		    }
-		    else{
-		    	trX = xx;
-		    	trY = v*t - (g/2.0)*t*t;
-		    	trZ = -h*t+zz-1;
-		    }
-		    
-		  	glTranslatef(trX, trY, trZ);		    
+	lvl.napraviNivo();
+	   
+	if(isAnimate){
+		glPushMatrix();
+		glColor3f(0, 0, 1);
+		   	// h*t, v*t - (g/2.0)*t*t 
+
+	    if(dirX > 0 && dirZ > 0){
+	   		trX = h*t+xx+1;
+	   		trY = v*t - (g/2.0)*t*t;
+	   		trZ = zz;
+	    }
+		else if(dirX < 0 && dirZ > 0){
+	    	trX = xx;
+		   	trY = v*t - (g/2.0)*t*t;
+	    	trZ = h*t+zz+1;
+	 	}
+	    else if(dirX < 0 && dirZ < 0){
+	    	trX = -h*t+xx-1;
+		  	trY = v*t - (g/2.0)*t*t;
+		   	trZ = zz;
+	    }
+	    else{
+	    	trX = xx;
+	    	trY = v*t - (g/2.0)*t*t;
+	    	trZ = -h*t+zz-1;
+	  	}
+			    
+		glTranslatef(trX, trY, trZ);		    
 		   
-		    glutSolidSphere(0.1, 10, 10);
+	    glutSolidSphere(0.1, 10, 10);
 		glPopMatrix();
 	}
-	
+
 	if(!input.svaBurad()){
     	lvl.crtajZid();
-    }
-
+	}
+	
     glutSwapBuffers(); 
 }
 

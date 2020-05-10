@@ -42,7 +42,7 @@ double zz = 0;
 double dirX = 0;
 double dirZ = 0;
 
-
+double trX =0; double trY = 0; double trZ = 0;
 
 
 int main(int argc, char** argv){
@@ -89,30 +89,41 @@ static void on_display(){
 	input.kamera_osvezi();
     lvl.napraviNivo();
    
-	
-   
-    glPushMatrix();
-     	glColor3f(0, 0, 1);
-    	// h*t, v*t - (g/2.0)*t*t, 
+	if(isAnimate){
+	    glPushMatrix();
+	     	glColor3f(0, 0, 1);
+	    	// h*t, v*t - (g/2.0)*t*t 
 
-    	if(dirX > 0 && dirZ > 0){
-	    	glTranslatef(h*t+xx+1, v*t - (g/2.0)*t*t, zz);
-	    }
-	    else if(dirX < 0 && dirZ > 0){
-	    	glTranslatef(xx, v*t - (g/2.0)*t*t, h*t+zz+1);
-	    }
-	    else if(dirX < 0 && dirZ < 0){
-	    	glTranslatef(-h*t+xx-1, v*t - (g/2.0)*t*t, zz);
-	    }
-	    else{
-	    	glTranslatef(xx, v*t - (g/2.0)*t*t, -h*t+zz-1);
-	    }
-	    
-	  
-	    
-	   
-	    glutSolidSphere(0.1, 10, 10);
-	glPopMatrix();
+	    	if(dirX > 0 && dirZ > 0){
+	    		trX = h*t+xx+1;
+	    		trY = v*t - (g/2.0)*t*t;
+	    		trZ = zz;
+		    }
+		    else if(dirX < 0 && dirZ > 0){
+		    	trX = xx;
+		    	trY = v*t - (g/2.0)*t*t;
+		    	trZ = h*t+zz+1;
+		    }
+		    else if(dirX < 0 && dirZ < 0){
+		    	trX = -h*t+xx-1;
+		    	trY = v*t - (g/2.0)*t*t;
+		    	trZ = zz;
+		    }
+		    else{
+		    	trX = xx;
+		    	trY = v*t - (g/2.0)*t*t;
+		    	trZ = -h*t+zz-1;
+		    }
+		    
+		  	glTranslatef(trX, trY, trZ);		    
+		   
+		    glutSolidSphere(0.1, 10, 10);
+		glPopMatrix();
+	}
+	
+	if(!input.svaBurad()){
+    	lvl.crtajZid();
+    }
 
     glutSwapBuffers(); 
 }
@@ -153,17 +164,17 @@ static void on_keyboard(unsigned char key, int x, int y){
         	buttons_list[5] = true;
         	break;
         case ' ':
+        	xx = input.retX();
+	        yy = input.retY();
+	    	zz = input.retZ();
+	    	dirX = input.retVx();
+	    	dirZ = input.retVz();
+
         	if(isAnimate==0) {isAnimate =1;}
 	        
 	        if(t > 17){
 	        	t = 0.0;
-
-	        	xx = input.retX();
-	        	yy = input.retY();
-	    		zz = input.retZ();
-	    		dirX = input.retVx();
-	    		dirZ = input.retVz();
-
+	        	input.upadUBure(trX, trY, trZ);
 	        	glutPostRedisplay();
 	        }
         	break;

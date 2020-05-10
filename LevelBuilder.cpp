@@ -115,6 +115,7 @@ void LevelBuilder::napraviNivo(){
     	buildWall(20, i, 90, true);
     }
    
+   	//--------------------HODNIK--------------------
    	for(int i=0; i>-20; i-=2){
     	buildWall(0, -19.9f+i, 90, true);
     }
@@ -123,6 +124,11 @@ void LevelBuilder::napraviNivo(){
     }
 
     buildWall(0, -40, 180, true);
+    //--------------------HODNIK--------------------
+
+    
+    //mozda 
+
 
     buildBure(0, 0); buildBure(10, 0); buildBure(0, 4); buildBure(12, 16); 
     buildBure(-2, -15); buildBure(-3, 7); buildBure(-14, -7); buildBure(19, 1); 
@@ -136,6 +142,9 @@ void LevelBuilder::napraviNivo(){
    
 }
 
+void LevelBuilder::crtajZid(){
+	buildWall(0, 20, 180, true);
+}
 
 void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 

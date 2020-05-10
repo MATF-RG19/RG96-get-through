@@ -11,7 +11,8 @@ class Input
         double yaw, pitch; 
         float wallerr = 0.5f;
        	std::vector<std::vector<int>> pozicije_burica;
-       	
+       	std::vector<bool> lopticaUBuretu;
+
     public:
         Input() { 
             naNule(); 
@@ -33,6 +34,8 @@ class Input
         double retVy();
         double retVz();
         double retYaw();
+        void upadUBure(double trX,double trY,double trZ);
+        bool svaBurad();
 
 };
 

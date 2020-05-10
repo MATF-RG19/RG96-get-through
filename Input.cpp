@@ -3,7 +3,7 @@
 #include <GL/glut.h>
 #include "Input.h"
 #include <iostream>
-
+#include <algorithm>
 
 
 void Input::pocetna_pozicija(double x, double y, double z)
@@ -52,6 +52,10 @@ void Input::naNule()
     										{-19, -19}, {15, 3}, {16, 12}, {1, 19},
     										{2, 15}, {7, -17}, {-14, 3}, {-15, -15},
     										{-5, 19}, {-7, 17}, {-9, 15}, {-4, -3}};
+
+
+    lopticaUBuretu.resize(20, false);
+    //std::fill(lopticaUBuretu.begin(), lopticaUBuretu.end(), false); 									
 }
 
 
@@ -92,53 +96,45 @@ void Input::KolizijaBurad(){
 			if(pos_x - pozicije_burica[i][0] >0 && pos_x -pozicije_burica[i][0] < 0.3 && pos_z > pozicije_burica[i][1] && pos_z < pozicije_burica[i][1]+1){
 				pos_x = pozicije_burica[i][0];
 			}
-
+ 
 			if(pos_x - pozicije_burica[i][0] > 0.7 && pos_x -pozicije_burica[i][0] < 1 && pos_z > pozicije_burica[i][1] && pos_z < pozicije_burica[i][1]+1){
 				pos_x = pozicije_burica[i][0]+1;
 			}
 
-			if(pos_z - pozicije_burica[i][1] > 0 && pos_z -pozicije_burica[i][1] < 0.3 && pos_x > pozicije_burica[i][0] && pos_x < pozicije_burica[i][0]+1){
+			if(pos_z - pozicije_burica[i][1] > 0 && pos_z -pozicije_burica[i][1] < 0.3 && pos_x > pozicije_burica[i][0]-0.2 && pos_x < pozicije_burica[i][0]+1.2){
 				pos_z = pozicije_burica[i][1];
 			}
 
-			if(pos_z - pozicije_burica[i][1] > 0.7 && pos_z -pozicije_burica[i][1] < 1 && pos_x > pozicije_burica[i][0] && pos_x < pozicije_burica[i][0]+1){
+			if(pos_z - pozicije_burica[i][1] > 0.7 && pos_z -pozicije_burica[i][1] < 1 && pos_x > pozicije_burica[i][0]-0.2 && pos_x < pozicije_burica[i][0]+1.2){
 				pos_z = pozicije_burica[i][1]+1;
 			}
 
-		}
-			
-
-			/*if(pos_x - pozicije_burica[i][0]-wallerr < pos_x - pozicije_burica[i][0]+1+wallerr){
-				pos_x = pozicije_burica[i][0]-wallerr;
-			}
-			else if(pos_x - pozicije_burica[i][0] >= pos_x - pozicije_burica[i][0]+1){
-				pos_x = pozicije_burica[i][0]+1+wallerr;
-			}
-
-			if(pos_z - pozicije_burica[i][1] < pos_z - pozicije_burica[i][1]+1){
-				pos_z = pozicije_burica[i][1]-wallerr;
-			}
-			else if(pos_z - pozicije_burica[i][1] >= pos_z - pozicije_burica[i][1]+1){
-				pos_z = pozicije_burica[i][1]+1+wallerr;
-			}*/
-
-			/*
-			if(pos_x >= pozicije_burica[i][0]){
-				pos_x = pozicije_burica[i][0];
-			}
-			else if(pos_x <= pozicije_burica[i][0]+1){
-				pos_x = pozicije_burica[i][0]+1;
-			}
-			
-			if(pos_z >= pozicije_burica[i][1]){
-				pos_z = pozicije_burica[i][1];
-			}
-			else if(pos_z <= pozicije_burica[i][1]+1){
-				pos_z = pozicije_burica[i][1]+1;
-			}
-			*/
-		
+		}		
 	}
+}
+
+void Input::upadUBure(double trX,double trY,double trZ){
+	for(int i=0; i < 20; i++){
+		if(trX >= pozicije_burica[i][0]-0.8 && trX <= pozicije_burica[i][0]+1.8 && trZ >= pozicije_burica[i][1]-0.8 && trZ <= pozicije_burica[i][1]+1.8){
+			lopticaUBuretu[i] = true;
+		}		
+	}
+}
+
+bool Input::svaBurad(){
+	int br = 0;
+	bool ret = true;
+
+	for(bool it: lopticaUBuretu){
+		if(it == false){
+			ret = false;
+			br += 1;
+		}
+	}
+
+	std::cout << br << std::endl;
+
+	return ret;
 }
 
 void Input::KolizijaZidovi(){

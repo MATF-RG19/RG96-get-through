@@ -14,7 +14,7 @@ public:
     void buildCeiling(double posX, double posZ);
     void buildFloor(double posX);
     void buildBure(double posX, double posZ);
-
+	void crtajZid();
 };
 
 #endif

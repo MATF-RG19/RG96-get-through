@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const double brzinaKretanja = 0.5;
+const double brzinaKretanja = 0.2;
 
 static void on_keyboard(unsigned char key, int x, int y);
 static void on_keyboard_up(unsigned char key, int x, int y);
@@ -29,9 +29,9 @@ int visina = 0;
 //za loptu
 static int isAnimate = 0; 
 static float t = 0.0; 
-static float h = 0.2; 
-static float v = 0.7; 
-static float g = 0.1;  
+static float h = 0.1; 
+static float v = 0.5; 
+static float g = 0.05;  
 Input input;
 LevelBuilder lvl; //= new LevelBuilder();
 
@@ -41,6 +41,9 @@ double zz = 0;
 
 double dirX = 0;
 double dirZ = 0;
+
+
+
 
 int main(int argc, char** argv){
     glutInit(&argc, argv);
@@ -87,11 +90,29 @@ static void on_display(){
     lvl.napraviNivo();
    
 	
-    glTranslatef(h*t+xx+1+dirX, v*t - (g/2.0)*t*t, zz+dirZ);
+   
+    glPushMatrix();
+     	glColor3f(0, 0, 1);
+    	// h*t, v*t - (g/2.0)*t*t, 
 
-    glColor3f(0, 0, 1);
-    glutWireSphere(0.1, 10, 10);
-
+    	if(dirX > 0 && dirZ > 0){
+	    	glTranslatef(h*t+xx+1, v*t - (g/2.0)*t*t, zz);
+	    }
+	    else if(dirX < 0 && dirZ > 0){
+	    	glTranslatef(xx, v*t - (g/2.0)*t*t, h*t+zz+1);
+	    }
+	    else if(dirX < 0 && dirZ < 0){
+	    	glTranslatef(-h*t+xx-1, v*t - (g/2.0)*t*t, zz);
+	    }
+	    else{
+	    	glTranslatef(xx, v*t - (g/2.0)*t*t, -h*t+zz-1);
+	    }
+	    
+	  
+	    
+	   
+	    glutSolidSphere(0.1, 10, 10);
+	glPopMatrix();
 
     glutSwapBuffers(); 
 }
@@ -132,20 +153,21 @@ static void on_keyboard(unsigned char key, int x, int y){
         	buttons_list[5] = true;
         	break;
         case ' ':
-        	if(isAnimate) {isAnimate =0;}
-        	else {isAnimate = 1;}
-        	xx = input.retX();
-    		zz = input.retZ();
-    		dirX = input.retVx();
-    		dirZ = input.retVz();
-        	glutPostRedisplay();
+        	if(isAnimate==0) {isAnimate =1;}
+	        
+	        if(t > 17){
+	        	t = 0.0;
+
+	        	xx = input.retX();
+	        	yy = input.retY();
+	    		zz = input.retZ();
+	    		dirX = input.retVx();
+	    		dirZ = input.retVz();
+
+	        	glutPostRedisplay();
+	        }
         	break;
 
-        case 'r':
-	        isAnimate = 0;
-			t = 0.0;
-	        glutPostRedisplay();
-			break;
         case 27:
             exit(EXIT_SUCCESS);
             break;
@@ -171,9 +193,15 @@ static void on_keyboard_up(unsigned char key, int x, int y){
             buttons_list[3] = false;
             break;
         case 'j':
+        	if(buttons_list[4] == true){
+        		input.yawOkretanje(-1.5708); //radijan za 90
+        	}
         	buttons_list[4] = false;
         	break;
         case 'l':
+        	if(buttons_list[5] == true){
+        		input.yawOkretanje(1.5708); //radijan 
+        	}
         	buttons_list[5] = false;
 
 
@@ -193,12 +221,7 @@ static void on_timer(int value){
     if(buttons_list[3]){
         input.LevoDesno(-brzinaKretanja);
     }
-    if(buttons_list[4]){
-    	input.yawOkretanje(-0.1);
-    }
-    if(buttons_list[5]){
-    	input.yawOkretanje(0.1);
-    }
+
 
     if(isAnimate){
     	t += 1.0;

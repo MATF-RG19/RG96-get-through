@@ -64,6 +64,25 @@ LevelBuilder::LevelBuilder(){
                  GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 
 
+    //-----------------------------TEKSTURA BURETA--------------------------------------------
+    std::string bur("bure.bmp");
+    char* cstr2 = new char[bur.length()+1];
+    std::strcpy(cstr2, bur.c_str());
+
+    image_read(image, cstr2);
+
+    glBindTexture(GL_TEXTURE_2D, name[2]);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_S, GL_REPEAT); 
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,
+                    GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                 image->width, image->height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 
 
     /////////////////////// 	***	  DONE 	***    //////////////////////////////////////
@@ -75,6 +94,8 @@ LevelBuilder::LevelBuilder(){
    
 
 void LevelBuilder::napraviNivo(){
+	glEnable(GL_TEXTURE_2D);
+
     buildFloor(40.0);
     
     for(int i=20; i>=-19; i-=2){
@@ -103,7 +124,16 @@ void LevelBuilder::napraviNivo(){
 
     buildWall(0, -40, 180, true);
 
-    buildBure(0, 0);
+    buildBure(0, 0); buildBure(10, 0); buildBure(0, 4); buildBure(12, 16); 
+    buildBure(-2, -15); buildBure(-3, 7); buildBure(-14, -7); buildBure(19, 1); 
+    buildBure(-19, -19); buildBure(15, 3); buildBure(16, 12); buildBure(1, 19);
+    buildBure(2, 15); buildBure(7, -17); buildBure(-14, 3); buildBure(-15, -15); 
+    buildBure(-5, 19); buildBure(-7, 17); buildBure(-9, 15); buildBure(-4, -3); 
+    //ima ih 20
+
+
+    glDisable(GL_TEXTURE_2D);
+   
 }
 
 
@@ -111,14 +141,13 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 
 	glPushMatrix();
 
-	
-
     glBindTexture(GL_TEXTURE_2D, name[0]);
     glTranslatef(posX, 0, posZ);
 	if(rot){
 	    glRotatef(rotD, 0, 1, 0);
 	}	
     
+    glEnable(GL_TEXTURE_2D);
   	
     glBegin(GL_QUADS);
         glNormal3f(0, 0, 1);
@@ -152,7 +181,7 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
-
+    glDisable(GL_TEXTURE_2D);
 
     glBegin(GL_QUADS);
 		glColor3f(0.45f, 0.45f, 0.45f);    	
@@ -171,6 +200,8 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
         glVertex3f(0, 2, width_wall);         
         glVertex3f(0, 2, -width_wall);
     glEnd();
+    
+    glEnable(GL_TEXTURE_2D);
 
     glPopMatrix();
 
@@ -179,43 +210,61 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 }
 
  void LevelBuilder::buildBure(double posX, double posZ){
+ 	
  	glPushMatrix();
+ 		glBindTexture(GL_TEXTURE_2D, name[2]);
 
  		glBegin(GL_QUADS);
- 			glColor3f(0.45f, 0.45f, 0.45f);
- 			glVertex3f(1, 0, -0.5f);
- 			glVertex3f(1, 0, 0.5f);
- 			glVertex3f(1, 0.8f, 0.5f);
- 			glVertex3f(1, 0.8f, -0.5f);
+
+ 			glTexCoord2f(0, 0);
+ 			glVertex3f(posX, 0, posZ);
+ 			glTexCoord2f(1, 0);
+ 			glVertex3f(posX, 0, posZ+1);
+ 			glTexCoord2f(1, 1);
+ 			glVertex3f(posX, 0.8f, posZ+1);
+ 			glTexCoord2f(0, 1);
+ 			glVertex3f(posX, 0.8f, posZ);
  		glEnd();
 
  		glBegin(GL_QUADS);
- 			glColor3f(0.45f, 0.45f, 0.45f);
- 			glVertex3f(1.7f, 0, -0.5f);
- 			glVertex3f(1.7f, 0, 0.5f);
- 			glVertex3f(1.7f, 0.8f, 0.5f);
- 			glVertex3f(1.7f, 0.8f, -0.5f);
+
+ 			glTexCoord2f(0, 0);
+ 			glVertex3f(posX+1, 0, posZ);
+ 			glTexCoord2f(1, 0);
+ 			glVertex3f(posX+1, 0, posZ+1);
+ 			glTexCoord2f(1, 1);
+ 			glVertex3f(posX+1, 0.8f, posZ+1);
+ 			glTexCoord2f(0, 1);
+ 			glVertex3f(posX+1, 0.8f, posZ);
  		glEnd();
 
  		glBegin(GL_QUADS);
- 			glColor3f(0.45f, 0.45f, 0.45f);
- 			glVertex3f(1, 0, 0.5f);
- 			glVertex3f(1.7f, 0, 0.5f);
- 			glVertex3f(1.7f, 0.8f, 0.5f);
- 			glVertex3f(1, 0.8f, 0.5f);
+
+ 			glTexCoord2f(0, 0);
+ 			glVertex3f(posX, 0, posZ+1);
+ 			glTexCoord2f(1, 0);
+ 			glVertex3f(posX+1, 0, posZ+1);
+ 			glTexCoord2f(1, 1);
+ 			glVertex3f(posX+1, 0.8f, posZ+1);
+ 			glTexCoord2f(0, 1);
+ 			glVertex3f(posX, 0.8f, posZ+1);
  		glEnd();
 
  		glBegin(GL_QUADS);
- 			glColor3f(0.45f, 0.45f, 0.45f);
- 			glVertex3f(1, 0, -0.5f);
- 			glVertex3f(1.7f, 0, -0.5f);
- 			glVertex3f(1.7f, 0.8f, -0.5f);
- 			glVertex3f(1, 0.8f, -0.5f);
+
+ 			glTexCoord2f(0, 0);
+ 			glVertex3f(posX, 0, posZ);
+ 			glTexCoord2f(1, 0);
+ 			glVertex3f(posX+1, 0, posZ);
+ 			glTexCoord2f(1, 1);
+ 			glVertex3f(posX+1, 0.8f, posZ);
+ 			glTexCoord2f(0, 1);
+ 			glVertex3f(posX, 0.8f, posZ);
  		glEnd();
 
+ 		glBindTexture(GL_TEXTURE_2D, 0);
 
  	glPopMatrix();
-
 
  }
 

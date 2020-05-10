@@ -1,9 +1,10 @@
 #include <math.h>
+#include <vector>
 #include <GL/glut.h>
 #include "Input.h"
 #include <iostream>
 
-GLUquadricObj *quadratic;
+
 
 void Input::pocetna_pozicija(double x, double y, double z)
 {
@@ -38,7 +39,6 @@ void Input::kamera_osvezi()
 
 void Input::naNule()
 {
-	quadratic = gluNewQuadric();
 
 	pitch = 0;
 	yaw = 1.6f;
@@ -46,6 +46,12 @@ void Input::naNule()
 	pos_z = -35;
 	pos_y = 1;
 	vecy = vecz = 1;
+
+	pozicije_burica = {{0, 0}, {10, 0}, {0, 4}, {12, 16},
+        									{-2, -15}, {-3, 7}, {-14, -7}, {19, 1},
+    										{-19, -19}, {15, 3}, {16, 12}, {1, 19},
+    										{2, 15}, {7, -17}, {-14, 3}, {-15, -15},
+    										{-5, 19}, {-7, 17}, {-9, 15}, {-4, -3}};
 }
 
 
@@ -57,6 +63,7 @@ void Input::Hodaj(double promena)
 	pos_z = pos_z + promena*lz;
 
 	KolizijaZidovi();
+	KolizijaBurad();
 	kamera_osvezi();
 }
 
@@ -66,6 +73,7 @@ void Input::LevoDesno(double promena)
 	pos_z = pos_z + promena*ldz;
 
 	KolizijaZidovi();
+	KolizijaBurad();
 	kamera_osvezi();
 }
 
@@ -74,6 +82,63 @@ void Input::yawOkretanje(double angle)
 	yaw += angle;
 
 	kamera_osvezi();
+}
+
+void Input::KolizijaBurad(){
+
+	for(int i=0; i < 20; i++){
+		
+		if(pos_x >= pozicije_burica[i][0] && pos_x <= pozicije_burica[i][0]+1 && pos_z >= pozicije_burica[i][1] && pos_z <= pozicije_burica[i][1]+1){
+			if(pos_x - pozicije_burica[i][0] >0 && pos_x -pozicije_burica[i][0] < 0.3 && pos_z > pozicije_burica[i][1] && pos_z < pozicije_burica[i][1]+1){
+				pos_x = pozicije_burica[i][0];
+			}
+
+			if(pos_x - pozicije_burica[i][0] > 0.7 && pos_x -pozicije_burica[i][0] < 1 && pos_z > pozicije_burica[i][1] && pos_z < pozicije_burica[i][1]+1){
+				pos_x = pozicije_burica[i][0]+1;
+			}
+
+			if(pos_z - pozicije_burica[i][1] > 0 && pos_z -pozicije_burica[i][1] < 0.3 && pos_x > pozicije_burica[i][0] && pos_x < pozicije_burica[i][0]+1){
+				pos_z = pozicije_burica[i][1];
+			}
+
+			if(pos_z - pozicije_burica[i][1] > 0.7 && pos_z -pozicije_burica[i][1] < 1 && pos_x > pozicije_burica[i][0] && pos_x < pozicije_burica[i][0]+1){
+				pos_z = pozicije_burica[i][1]+1;
+			}
+
+		}
+			
+
+			/*if(pos_x - pozicije_burica[i][0]-wallerr < pos_x - pozicije_burica[i][0]+1+wallerr){
+				pos_x = pozicije_burica[i][0]-wallerr;
+			}
+			else if(pos_x - pozicije_burica[i][0] >= pos_x - pozicije_burica[i][0]+1){
+				pos_x = pozicije_burica[i][0]+1+wallerr;
+			}
+
+			if(pos_z - pozicije_burica[i][1] < pos_z - pozicije_burica[i][1]+1){
+				pos_z = pozicije_burica[i][1]-wallerr;
+			}
+			else if(pos_z - pozicije_burica[i][1] >= pos_z - pozicije_burica[i][1]+1){
+				pos_z = pozicije_burica[i][1]+1+wallerr;
+			}*/
+
+			/*
+			if(pos_x >= pozicije_burica[i][0]){
+				pos_x = pozicije_burica[i][0];
+			}
+			else if(pos_x <= pozicije_burica[i][0]+1){
+				pos_x = pozicije_burica[i][0]+1;
+			}
+			
+			if(pos_z >= pozicije_burica[i][1]){
+				pos_z = pozicije_burica[i][1];
+			}
+			else if(pos_z <= pozicije_burica[i][1]+1){
+				pos_z = pozicije_burica[i][1]+1;
+			}
+			*/
+		
+	}
 }
 
 void Input::KolizijaZidovi(){
@@ -94,9 +159,12 @@ void Input::KolizijaZidovi(){
 		pos_z = (-20.f +wallerr);
 	}
 
-	if(pos_z > (20.f - wallerr) && pos_x < (-2.f+wallerr) && pos_x > (0.f - wallerr)){
-		exit(EXIT_SUCCESS);
-		std::cout << "hello";
+	if(pos_z > (20.f - wallerr)){  //&& pos_x < (-2.f+wallerr) && pos_x > (0.f - wallerr)
+		if(pos_x < 0 && pos_x > -2){
+			std::cout << "izlaz";
+		}else{
+			pos_z = (20.f - wallerr);
+		}
 	}
 
 	if(pos_x > 20.f-wallerr){
@@ -127,4 +195,8 @@ double Input::retVy(){
 }
 double Input::retVz(){
 	return vecz;
+}
+
+double Input::retYaw(){
+	return yaw;
 }

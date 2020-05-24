@@ -15,3 +15,9 @@ Kontrola     |  Akcija
 <kbd>j</kbd> | Okreni se 90° nalevo
 <kbd>l</kbd> | Okreni se 90° nadesno
 <kbd>SPACE</kbd> | Baci lopticu
+
+### Instalacija
+Potrebno je instalirati freeglut sledecom komandom:
+> apt-get install freeglut3-dev
+
+dalje je dovoljno pozvati make komandu unutar direktorijuma

@@ -3,8 +3,8 @@
 #include <assert.h>
 #include "Image.h"
 
+//Inicijalizacija i alokacija objekta koji sadrzi sliku i piksela koji ce da se sadrze u njoj
 Image *image_init(int width, int height) {
-
   	Image *image;
   	assert(width >= 0 && height >= 0);
 
@@ -23,6 +23,7 @@ Image *image_init(int width, int height) {
   	return image;
 }
 
+//Ako smo zavrsili sa slikom oslobadjamo memoriju
 void image_done(Image *image) {
 
   	free(image->pixels);

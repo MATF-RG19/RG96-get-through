@@ -13,7 +13,7 @@ float texture_repeat_wall = 5;
 LevelBuilder::LevelBuilder(){
 
 	//----------------------------------- TEKSTURA ZA ZID --------------------------------------
-	std::string zid("wall.bmp");
+	std::string zid("res/wall.bmp");
 	char* cstr = new char [zid.length() + 1];
 	std::strcpy(cstr, zid.c_str());
 
@@ -44,7 +44,7 @@ LevelBuilder::LevelBuilder(){
                  GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 
     //-----------------------------TEKSTURA PODLOGE--------------------------------------------
-    std::string pod("earth.bmp");
+    std::string pod("res/earth.bmp");
     char* cstr1 = new char[pod.length()+1];
     std::strcpy(cstr1, pod.c_str());
 
@@ -65,7 +65,7 @@ LevelBuilder::LevelBuilder(){
 
 
     //-----------------------------TEKSTURA BURETA--------------------------------------------
-    std::string bur("bure.bmp");
+    std::string bur("res/bure.bmp");
     char* cstr2 = new char[bur.length()+1];
     std::strcpy(cstr2, bur.c_str());
 

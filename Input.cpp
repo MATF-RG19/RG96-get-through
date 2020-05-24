@@ -58,10 +58,10 @@ void Input::naNule()
 	vecy = vecz = 1;
 
 	pozicije_burica = {{0, 0}, {10, 0}, {0, 4}, {12, 16},
-        									{-2, -15}, {-3, 7}, {-14, -7}, {19, 1},
-    										{-19, -19}, {15, 3}, {16, 12}, {1, 19},
+        									{-2, -15}, {-3, 7}, {-14, -7}, {18, 1},
+    										{-18, -18}, {15, 3}, {16, 12}, {1, 18},
     										{2, 15}, {7, -17}, {-14, 3}, {-15, -15},
-    										{-5, 19}, {-7, 17}, {-9, 15}, {-4, -3}};
+    										{-5, 18}, {-7, 17}, {-9, 15}, {-4, -3}};
 
 
     lopticaUBuretu.resize(20, false);							
@@ -142,7 +142,7 @@ void Input::KolizijaBurad(){
 */
 void Input::upadUBure(double trX,double trY,double trZ){
 	for(int i=0; i < 20; i++){
-		if(trX >= pozicije_burica[i][0]-0.8 && trX <= pozicije_burica[i][0]+1.8 && trZ >= pozicije_burica[i][1]-0.8 && trZ <= pozicije_burica[i][1]+1.8){
+		if(trX >= pozicije_burica[i][0] && trX <= pozicije_burica[i][0]+1 && trZ >= pozicije_burica[i][1] && trZ <= pozicije_burica[i][1]+1 && trY >= 0.7f && trY <= 0.9f){
 			lopticaUBuretu[i] = true;
 		}		
 	}

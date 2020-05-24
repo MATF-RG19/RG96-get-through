@@ -103,7 +103,7 @@ LevelBuilder::LevelBuilder(){
 void LevelBuilder::napraviNivo(){
 	glEnable(GL_TEXTURE_2D);
 
-    buildFloor(40.0);
+    buildFloor(80.0);
     
     for(int i=20; i>=-19; i-=2){
     	if(i!=0){
@@ -135,10 +135,10 @@ void LevelBuilder::napraviNivo(){
 
 
     buildBure(0, 0); buildBure(10, 0); buildBure(0, 4); buildBure(12, 16); 
-    buildBure(-2, -15); buildBure(-3, 7); buildBure(-14, -7); buildBure(19, 1); 
-    buildBure(-19, -19); buildBure(15, 3); buildBure(16, 12); buildBure(1, 19);
+    buildBure(-2, -15); buildBure(-3, 7); buildBure(-14, -7); buildBure(18, 1); 
+    buildBure(-18, -18); buildBure(15, 3); buildBure(16, 12); buildBure(1, 18);
     buildBure(2, 15); buildBure(7, -17); buildBure(-14, 3); buildBure(-15, -15); 
-    buildBure(-5, 19); buildBure(-7, 17); buildBure(-9, 15); buildBure(-4, -3); 
+    buildBure(-5, 18); buildBure(-7, 17); buildBure(-9, 15); buildBure(-4, -3); 
     //ima ih 20
 
 

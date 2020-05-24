@@ -26,6 +26,7 @@ static void on_idle();
 // 0 1 2 3 4 5
 bool buttons_list[6];   //Niska uz pomoc koje znamo koje je dugme pritisnuto
 
+
 int sirina = 0;         //prozora
 int visina = 0;
 
@@ -82,6 +83,23 @@ int main(int argc, char** argv){
     lvl = LevelBuilder();
     glutIgnoreKeyRepeat(1);
 
+    //---------------------OSVETLJENJE ZA LOPTICU---------------------
+
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    float light_position[] = {-1, 1, 2, 1};
+    float light_ambient[] = {0, 0, 1, 1};
+    float light_diffuse[] = {.2f, .2f, 0.8f, 1};
+    float light_specular[] = {.2f, .2f, .9f, 1};
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+
     //----------------------GLAVNA PETLJA----------------------
     glutMainLoop();
 
@@ -106,10 +124,11 @@ static void on_display(){
 	if(isAnimate){
 		glPushMatrix();
             //----------------------LOPTICA ISCRTAVANJE----------------------
-            //U zavisnosti od vektora smera poziva se formula za kosi hitac
+            //U zavisnosti od vektora smera igraca poziva se formula za kosi hitac
             // h*t, v*t - (g/2.0)*t*t 
 
             glColor3f(0, 0, 1);
+
             if(dirX > 0 && dirZ > 0){
                 trX = h*t+xx+1;
                 trY = v*t - (g/2.0)*t*t;
@@ -131,19 +150,23 @@ static void on_display(){
                 trZ = -h*t+zz-1;
             }
             
+            input.upadUBure(trX, trY, trZ); //Nakon ove racunice mozemo proveriti da li je loptica upala u bure
             
             glTranslatef(trX, trY, trZ);		    
-            glutSolidSphere(0.1, 10, 10);
+            glutSolidSphere(0.1, 20, 20);
             //--------------------KRAJ ISCRTAVANJA LOPTICE------------------
 		glPopMatrix();
 	}
 
 	if(!input.svaBurad()){
         /* 
-            Endgame event u kojem se otvara izlaz iz nivoa
+            Izlaz je pokriven dok uslov za pobedu igrice nije zadovoljen
         */
     	lvl.crtajZid();
 	}
+    else if(input.retZ() > 21){
+        exit(EXIT_SUCCESS);
+    }
 	
     glutSwapBuffers(); 
 }
@@ -204,7 +227,6 @@ static void on_keyboard(unsigned char key, int x, int y){
             //Dozvoljeno je ponovno bacanje kada ranije bacena loptica padne
 	        if(t > 17){
 	        	t = 0.0;
-	        	input.upadUBure(trX, trY, trZ);
 	        	glutPostRedisplay();
 	        }
 

@@ -5,7 +5,9 @@
 #include <iostream>
 #include <algorithm>
 
-
+/*
+	Inicijalizujemo poziciju igraca na prosledjenu (x, y, z)
+*/
 void Input::pocetna_pozicija(double x, double y, double z)
 {
 	pos_x = x;
@@ -15,6 +17,11 @@ void Input::pocetna_pozicija(double x, double y, double z)
 	kamera_osvezi();
 }
 
+/*
+	Osvezavamo kameru na osnovu ugla pomeranja putem (vecx, vecy, vecz) vektora pravca u koji igrac gleda,
+	ldx, ldz nam pomazu da racunamo i pomeramo (pos_x, pos_y, pos_z) u pravcu koji je trenutno napred.
+	Postavljamo gluLookAt(), tacku iz koje posmatramo, i tacku na koju posmatramo
+*/
 void Input::kamera_osvezi()
 {
 	//glTranslatef(pos_x +2+vecx, 1, pos_z+vecz);
@@ -36,7 +43,10 @@ void Input::kamera_osvezi()
 }
 
 
-
+/*
+	Brojevna inicijalizacija promenljivih.
+	Hardkodovane pozicije burica
+*/
 void Input::naNule()
 {
 	izlaz = false;
@@ -54,11 +64,15 @@ void Input::naNule()
     										{-5, 19}, {-7, 17}, {-9, 15}, {-4, -3}};
 
 
-    lopticaUBuretu.resize(20, false);
-    //std::fill(lopticaUBuretu.begin(), lopticaUBuretu.end(), false); 									
+    lopticaUBuretu.resize(20, false);							
 }
 
+/*
+	Promenljiva double promena koja regulise brzinu kojom zelimo da se krecemo napred.
+	lx i lz pravac u kojem zelimo da izvedemo promenu s obzirom na trenutni ugao.
 
+	
+*/
 void Input::Hodaj(double promena)
 {
     double lx = cos(yaw)*cos(pitch);
@@ -71,6 +85,10 @@ void Input::Hodaj(double promena)
 	kamera_osvezi();
 }
 
+/*
+	lx i lz pravac u kojem zelimo da izvedemo promenu s obzirom na trenutni ugao.
+	Pozivaju se funkcije za proveru kolizije
+*/
 void Input::LevoDesno(double promena)
 {
 	pos_x = pos_x + promena*ldx;
@@ -81,6 +99,9 @@ void Input::LevoDesno(double promena)
 	kamera_osvezi();
 }
 
+/*
+	ugao rotacije levo desno u radijanima
+*/
 void Input::yawOkretanje(double angle)
 {
 	yaw += angle;
@@ -88,6 +109,9 @@ void Input::yawOkretanje(double angle)
 	kamera_osvezi();
 }
 
+/*
+	Uz pomoc niz pozicije_burica proveravamo da li je doslo do kolizije sa svakim od burica
+*/
 void Input::KolizijaBurad(){
 
 	for(int i=0; i < 20; i++){
@@ -113,6 +137,9 @@ void Input::KolizijaBurad(){
 	}
 }
 
+/*
+	Proveravamo da li je loptica upala na dno bureta
+*/
 void Input::upadUBure(double trX,double trY,double trZ){
 	for(int i=0; i < 20; i++){
 		if(trX >= pozicije_burica[i][0]-0.8 && trX <= pozicije_burica[i][0]+1.8 && trZ >= pozicije_burica[i][1]-0.8 && trZ <= pozicije_burica[i][1]+1.8){
@@ -121,6 +148,10 @@ void Input::upadUBure(double trX,double trY,double trZ){
 	}
 }
 
+/*
+	Funkcija za proveru da li su svi burici popunjeni.
+	Predstavlja uslov za zavrsetak igre
+*/
 bool Input::svaBurad(){
 	int br = 0;
 	bool ret = true;
@@ -137,6 +168,9 @@ bool Input::svaBurad(){
 	return ret;
 }
 
+/* 
+	Hardkodovana provera kolizije sa granicama nivoa
+*/
 void Input::KolizijaZidovi(){
 	wallerr =0.5f;
 	if(pos_z < (-20.f +wallerr) && pos_x < 0 && pos_x > -2){
@@ -171,6 +205,7 @@ void Input::KolizijaZidovi(){
 	}
 }
 
+////////-----GETERI-----////////
 bool Input::getIzlaz(){
 	return izlaz;
 }

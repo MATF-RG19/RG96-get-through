@@ -11,56 +11,66 @@ using namespace std;
 
 const double brzinaKretanja = 0.2;
 
+
+//------------------------------------CALLBACK funkcije------------------------------------
 static void on_keyboard(unsigned char key, int x, int y);
 static void on_keyboard_up(unsigned char key, int x, int y);
 static void on_display();
 static void on_reshape(int width, int height);
 static void on_timer(int value);
-
 static void on_idle();
+//-----------------------------------------------------------------------------------------
+
 
 // w s a d j k 
 // 0 1 2 3 4 5
-bool buttons_list[6];
+bool buttons_list[6];   //Niska uz pomoc koje znamo koje je dugme pritisnuto
 
-int sirina = 0;
+int sirina = 0;         //prozora
 int visina = 0;
 
 
-//za loptu
+//Promenljive za animaciju kosog hitca
 static int isAnimate = 0; 
 static float t = 0.0; 
 static float h = 0.1; 
 static float v = 0.5; 
 static float g = 0.05;  
-Input input;
-LevelBuilder lvl; //= new LevelBuilder();
 
+
+Input input;
+LevelBuilder lvl; 
+
+//Pomocne promenljive za odredjivanje pozicije i smera pogleda igraca 
+//Preuzimamo ih geterima
 double xx = 0;
 double yy = 0;
 double zz = 0;
-
+//--------smer deo--------
 double dirX = 0;
 double dirZ = 0;
 
+//Promenljive koje ce da sadrze vrednost za translaciju koja treba da se izvrsi
 double trX =0; double trY = 0; double trZ = 0;
 
 
 int main(int argc, char** argv){
+    //----------------------PROZOR I INICIJALIZACIJA----------------------
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(1024, 768);
     glutInitWindowPosition(100, 100);
-
     glutCreateWindow("Get Through");
 
+    //----------------------CALLBACK FUNKCIJE----------------------
     glutKeyboardFunc(on_keyboard);
     glutKeyboardUpFunc(on_keyboard_up);
-    
     glutDisplayFunc(on_display);
     glutReshapeFunc(on_reshape);
     glutIdleFunc(on_idle);
+    glutTimerFunc(33, on_timer, 0);
 
+    //----------------------PODESAVANJE OPENGLa----------------------
     glutSetCursor(GLUT_CURSOR_NONE);
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE);
@@ -68,11 +78,11 @@ int main(int argc, char** argv){
     glEnable(GL_NORMALIZE);
     glEnable(GL_TEXTURE_2D);
 
+    
     lvl = LevelBuilder();
-
     glutIgnoreKeyRepeat(1);
 
-    glutTimerFunc(33, on_timer, 0);
+    //----------------------GLAVNA PETLJA----------------------
     glutMainLoop();
 
     return 0;
@@ -82,8 +92,10 @@ static void on_idle(){
     on_display();
 }
 
+/* 
+    Upkeep i funkcije za iscrtavanje
+*/
 static void on_display(){
-
     glClearColor(0.85f, 0.94f, 0.98f,0); 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -93,47 +105,56 @@ static void on_display(){
 	   
 	if(isAnimate){
 		glPushMatrix();
-		glColor3f(0, 0, 1);
-		   	// h*t, v*t - (g/2.0)*t*t 
+            //----------------------LOPTICA ISCRTAVANJE----------------------
+            //U zavisnosti od vektora smera poziva se formula za kosi hitac
+            // h*t, v*t - (g/2.0)*t*t 
 
-	    if(dirX > 0 && dirZ > 0){
-	   		trX = h*t+xx+1;
-	   		trY = v*t - (g/2.0)*t*t;
-	   		trZ = zz;
-	    }
-		else if(dirX < 0 && dirZ > 0){
-	    	trX = xx;
-		   	trY = v*t - (g/2.0)*t*t;
-	    	trZ = h*t+zz+1;
-	 	}
-	    else if(dirX < 0 && dirZ < 0){
-	    	trX = -h*t+xx-1;
-		  	trY = v*t - (g/2.0)*t*t;
-		   	trZ = zz;
-	    }
-	    else{
-	    	trX = xx;
-	    	trY = v*t - (g/2.0)*t*t;
-	    	trZ = -h*t+zz-1;
-	  	}
-			    
-		glTranslatef(trX, trY, trZ);		    
-		   
-	    glutSolidSphere(0.1, 10, 10);
+            glColor3f(0, 0, 1);
+            if(dirX > 0 && dirZ > 0){
+                trX = h*t+xx+1;
+                trY = v*t - (g/2.0)*t*t;
+                trZ = zz;
+            }
+            else if(dirX < 0 && dirZ > 0){
+                trX = xx;
+                trY = v*t - (g/2.0)*t*t;
+                trZ = h*t+zz+1;
+            }
+            else if(dirX < 0 && dirZ < 0){
+                trX = -h*t+xx-1;
+                trY = v*t - (g/2.0)*t*t;
+                trZ = zz;
+            }
+            else{
+                trX = xx;
+                trY = v*t - (g/2.0)*t*t;
+                trZ = -h*t+zz-1;
+            }
+            
+            
+            glTranslatef(trX, trY, trZ);		    
+            glutSolidSphere(0.1, 10, 10);
+            //--------------------KRAJ ISCRTAVANJA LOPTICE------------------
 		glPopMatrix();
 	}
 
 	if(!input.svaBurad()){
+        /* 
+            Endgame event u kojem se otvara izlaz iz nivoa
+        */
     	lvl.crtajZid();
 	}
 	
     glutSwapBuffers(); 
 }
 
+/*
+    Upkeep za odrzavanje srazmere prikazanog u slucaju promene rezolucije prozora
+*/
 static void on_reshape(int width, int height){
     sirina = width; visina = height;
-
     glViewport(0, 0, width, height);
+
     glMatrixMode(GL_PROJECTION);
 
     glLoadIdentity();
@@ -141,6 +162,9 @@ static void on_reshape(int width, int height){
     glMatrixMode(GL_MODELVIEW);
 }
 
+/*
+    Registrujemo pritiskanje dugmica
+*/
 static void on_keyboard(unsigned char key, int x, int y){
     switch (key)
     {
@@ -166,6 +190,9 @@ static void on_keyboard(unsigned char key, int x, int y){
         	buttons_list[5] = true;
         	break;
         case ' ':
+            //Geterima dobavljamo poziciju i pravac igraca u trenutku bacanja loptice
+            //cuvamo ih na globalnom nivou
+
         	xx = input.retX();
 	        yy = input.retY();
 	    	zz = input.retZ();
@@ -174,11 +201,13 @@ static void on_keyboard(unsigned char key, int x, int y){
 
         	if(isAnimate==0) {isAnimate =1;}
 	        
+            //Dozvoljeno je ponovno bacanje kada ranije bacena loptica padne
 	        if(t > 17){
 	        	t = 0.0;
 	        	input.upadUBure(trX, trY, trZ);
 	        	glutPostRedisplay();
 	        }
+
         	break;
 
         case 27:
@@ -187,6 +216,11 @@ static void on_keyboard(unsigned char key, int x, int y){
     }
 }
 
+/*
+    Ovde registrujemo kada dugme prestane da bude pritisnuto
+    To je zgodno kada nam je potrebno da registrujemo samo jedno 
+    pritiskanje dugmeta, umesto pritiskanja u kontinuitetu.
+*/
 static void on_keyboard_up(unsigned char key, int x, int y){
     switch (key)
     {
@@ -221,6 +255,11 @@ static void on_keyboard_up(unsigned char key, int x, int y){
     }
 }
 
+/*
+    Zelimo da se igrica izvrsava istom brzinom na svakom racunaru, 33 FPS.
+    Ovde zelimo da pozivamo funkcije za dogadjanja koja se izvrsavaju u 
+    kontinuitetu dok je dugme pritisnuto. Time eliminisemo seckanja koja mogu da se dogode. 
+*/
 static void on_timer(int value){
     if(buttons_list[0]){
         input.Hodaj(brzinaKretanja);

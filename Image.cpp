@@ -30,6 +30,10 @@ void image_done(Image *image) {
   	free(image);
 }
 
+/*
+	Ucitavamo sliku sa prosledjene putanje, inicijalizujemo objekat dalje ali sada sa podacima iz slike.
+	Slika mora imati 32 ili 24 bita po pikselu. Zatvaramo fajl odaklse smo ucitavali sliku.
+*/
 void image_read(Image *image, char *filename) {
 
   	FILE *file;

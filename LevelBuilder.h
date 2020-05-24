@@ -7,11 +7,11 @@
 
 class LevelBuilder{
 public:
-    LevelBuilder();
 
-    void napraviNivo();
-    void buildWall(double posX, double posZ, double rotD, bool rot);
-    void buildCeiling(double posX, double posZ);
+    LevelBuilder(); //Konstruktor
+
+    void napraviNivo(); //Ova funkcija poziva ostale funkcije za konstruisanje nivoa
+    void buildWall(double posX, double posZ, double rotD, bool rot); 
     void buildFloor(double posX);
     void buildBure(double posX, double posZ);
 	void crtajZid();

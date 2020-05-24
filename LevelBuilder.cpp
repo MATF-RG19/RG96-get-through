@@ -5,11 +5,16 @@
 #include "Image.h"
 
 
-
+//pomocne promenljive
 static GLuint name[3];   
 float width_wall = 0.1f;
 float texture_repeat_wall = 5;
 
+/*
+    Ucitavamo slike za teksture putem klase Image iz odgovarajuceg direktorijuma,
+    zatim podesavamo OpenGl parametre za prikazivanje tekstura i povezujemo ih sa 
+    niskom koja ce da oznacava koju teksturu zelimo da primenimo. 
+*/
 LevelBuilder::LevelBuilder(){
 
 	//----------------------------------- TEKSTURA ZA ZID --------------------------------------
@@ -92,7 +97,9 @@ LevelBuilder::LevelBuilder(){
 
 }
    
-
+/*
+    Odavde se zovu funkcije za izgradnju pojedinacnih objekata, zidova, burica i podloge.   
+*/
 void LevelBuilder::napraviNivo(){
 	glEnable(GL_TEXTURE_2D);
 
@@ -126,9 +133,6 @@ void LevelBuilder::napraviNivo(){
     buildWall(0, -40, 180, true);
     //--------------------HODNIK--------------------
 
-    
-    //mozda 
-
 
     buildBure(0, 0); buildBure(10, 0); buildBure(0, 4); buildBure(12, 16); 
     buildBure(-2, -15); buildBure(-3, 7); buildBure(-14, -7); buildBure(19, 1); 
@@ -142,10 +146,14 @@ void LevelBuilder::napraviNivo(){
    
 }
 
+
 void LevelBuilder::crtajZid(){
 	buildWall(0, 20, 180, true);
 }
 
+/*  
+    Gradimo pravougaonik koji predstavlja zid i nakon toga dodajemo teksture na vidljive strane
+*/
 void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 
 	glPushMatrix();
@@ -218,7 +226,11 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 
 }
 
- void LevelBuilder::buildBure(double posX, double posZ){
+/*
+    Crtamo cetiri pravougaonika i sklapamo ih u jedan objekat, potom za svakom dodajemo odabranu teksturu
+    bureta u odgovarajucoj tacki, nakon iscrtavanja iskljucujemo crtanje tekstura  
+*/
+void LevelBuilder::buildBure(double posX, double posZ){
  	
  	glPushMatrix();
  		glBindTexture(GL_TEXTURE_2D, name[2]);
@@ -277,8 +289,11 @@ void LevelBuilder::buildWall(double posX, double posZ, double rotD, bool rot){
 
  }
 
-void LevelBuilder::buildCeiling(double posX, double posZ){};
 
+/*
+    Crtamo pod razmera koje su predate parametrom, povezujemo ga sa teksturom zemlje,
+    zatim odredjujemo tacke prikazivanja teksture i koliko puta se ponavljaju (50)
+*/
 void LevelBuilder::buildFloor(double posX){
 	glBindTexture(GL_TEXTURE_2D, name[1]);
 

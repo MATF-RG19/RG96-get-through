@@ -1,4 +1,8 @@
 #ifndef SLIKE
+
+/*
+    Potrebne informacije o jednoj slici
+*/
 #define SLIKE
 typedef struct {
     unsigned short type;

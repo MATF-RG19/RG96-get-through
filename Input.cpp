@@ -4,6 +4,7 @@
 #include "Input.h"
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 /*
 	Inicijalizujemo poziciju igraca na prosledjenu (x, y, z)
@@ -163,8 +164,18 @@ bool Input::svaBurad(){
 		}
 	}
 
-	std::cout << br << std::endl;
+	std::string broj_txt = std::to_string(br);
+	
+	
+	glPushMatrix();
+		glColor3f(1,1,1);
+		glRasterPos3f(pos_x + vecx, pos_y + vecy-0.5f, pos_z + vecz);
+		for(auto it=broj_txt.begin(); it!= broj_txt.end(); it++) {
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,*it);
+		}
 
+		
+	glPopMatrix();
 	return ret;
 }
 

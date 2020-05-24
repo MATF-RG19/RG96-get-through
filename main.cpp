@@ -6,10 +6,12 @@
 #include "Input.h"
 #include "LevelBuilder.h"
 #include <stdio.h>
+#include <string>
 
 using namespace std;
 
 const double brzinaKretanja = 0.2;
+
 
 
 //------------------------------------CALLBACK funkcije------------------------------------
@@ -29,6 +31,10 @@ bool buttons_list[6];   //Niska uz pomoc koje znamo koje je dugme pritisnuto
 
 int sirina = 0;         //prozora
 int visina = 0;
+
+//izlazna poruka
+string izlazna_poruka1 = "Pobeda!";
+string izlazna_poruka2 = "Izlaz je otvoren";
 
 
 //Promenljive za animaciju kosog hitca
@@ -83,23 +89,6 @@ int main(int argc, char** argv){
     lvl = LevelBuilder();
     glutIgnoreKeyRepeat(1);
 
-    //---------------------OSVETLJENJE ZA LOPTICU---------------------
-
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
-
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
-    float light_position[] = {-1, 1, 2, 1};
-    float light_ambient[] = {0, 0, 1, 1};
-    float light_diffuse[] = {.2f, .2f, 0.8f, 1};
-    float light_specular[] = {.2f, .2f, .9f, 1};
-
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-
     //----------------------GLAVNA PETLJA----------------------
     glutMainLoop();
 
@@ -120,12 +109,32 @@ static void on_display(){
 	input.kamera_osvezi();
 
 	lvl.napraviNivo();
+
+    
 	   
 	if(isAnimate){
+        glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+
 		glPushMatrix();
             //----------------------LOPTICA ISCRTAVANJE----------------------
             //U zavisnosti od vektora smera igraca poziva se formula za kosi hitac
             // h*t, v*t - (g/2.0)*t*t 
+
+             //---------------------OSVETLJENJE ZA LOPTICU---------------------
+
+            
+
+            float light_position[] = {-1, 1, 2, 1};
+            float light_ambient[] = {0, 0, 1, 1};
+            float light_diffuse[] = {.2f, .2f, 0.8f, 1};
+            float light_specular[] = {.2f, .2f, .9f, 1};
+
+            glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+            glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+            glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+            glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 
             glColor3f(0, 0, 1);
 
@@ -156,6 +165,8 @@ static void on_display(){
             glutSolidSphere(0.1, 20, 20);
             //--------------------KRAJ ISCRTAVANJA LOPTICE------------------
 		glPopMatrix();
+        glDisable(GL_LIGHTING);
+        glDisable(GL_LIGHT0);
 	}
 
 	if(!input.svaBurad()){
@@ -164,8 +175,30 @@ static void on_display(){
         */
     	lvl.crtajZid();
 	}
-    else if(input.retZ() > 21){
-        exit(EXIT_SUCCESS);
+    else{
+        if(input.retZ() > 21){
+            exit(EXIT_SUCCESS);
+        }
+        else{
+            
+            glPushMatrix();
+                glColor3f(1,0,0);
+                glRasterPos3f(input.retX() + input.retVx(), input.retY() + input.retVy()+0.5f, input.retZ() + input.retVz());
+                for(auto it=izlazna_poruka1.begin(); it!= izlazna_poruka1.end(); it++) {
+                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,*it);
+                }
+            
+            glPopMatrix();
+
+            glPushMatrix();
+                glColor3f(1,0,0);
+                glRasterPos3f(input.retX() + input.retVx(), input.retY() + input.retVy()+0.45f, input.retZ() + input.retVz());
+                for(auto it=izlazna_poruka2.begin(); it!= izlazna_poruka2.end(); it++) {
+                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,*it);
+                }
+            
+            glPopMatrix();
+        }
     }
 	
     glutSwapBuffers(); 
@@ -225,7 +258,7 @@ static void on_keyboard(unsigned char key, int x, int y){
         	if(isAnimate==0) {isAnimate =1;}
 	        
             //Dozvoljeno je ponovno bacanje kada ranije bacena loptica padne
-	        if(t > 17){
+	        if(t > 18){
 	        	t = 0.0;
 	        	glutPostRedisplay();
 	        }

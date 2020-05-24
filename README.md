@@ -17,7 +17,7 @@ Kontrola     |  Akcija
 <kbd>SPACE</kbd> | Baci lopticu
 
 ### Instalacija
-Potrevnbno je instalirati freeglut sledecom komandom:
+Potrebno je instalirati freeglut sledecom komandom:
 > apt-get install freeglut3-dev
 
 dalje je dovoljno pozvati make komandu unutar direktorijuma

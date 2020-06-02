@@ -12,8 +12,8 @@ Kontrola     |  Akcija
 <kbd>s</kbd> | Nazad
 <kbd>a</kbd> | Levo
 <kbd>d</kbd> | Desno
-<kbd>j</kbd> | Okreni se 90° nalevo
-<kbd>l</kbd> | Okreni se 90° nadesno
+<kbd>j</kbd> | Okreni se nalevo
+<kbd>l</kbd> | Okreni se nadesno
 <kbd>SPACE</kbd> | Baci lopticu
 
 ### Instalacija

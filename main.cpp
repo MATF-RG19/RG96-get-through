@@ -10,6 +10,8 @@
 
 using namespace std;
 
+#define PI 3.14159265
+
 const double brzinaKretanja = 0.2;
 
 
@@ -57,9 +59,21 @@ double zz = 0;
 double dirX = 0;
 double dirZ = 0;
 
+double yawyaw = 0;
+
+
+
 //Promenljive koje ce da sadrze vrednost za translaciju koja treba da se izvrsi
 double trX =0; double trY = 0; double trZ = 0;
 
+double findTheDegree(double X, double Z){
+	if(X > 0){
+		return acos(Z)*180/PI;
+	}
+	else{
+		return 360 - acos(Z)*180/PI;
+	}
+}
 
 int main(int argc, char** argv){
     //----------------------PROZOR I INICIJALIZACIJA----------------------
@@ -116,6 +130,9 @@ static void on_display(){
         glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,1);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
+        //glPushMatrix();
+
+        
 
 		glPushMatrix();
             //----------------------LOPTICA ISCRTAVANJE----------------------
@@ -124,7 +141,7 @@ static void on_display(){
 
              //---------------------OSVETLJENJE ZA LOPTICU---------------------
 
-            
+        	   
 
             float light_position[] = {-1, 1, 2, 1};
             float light_ambient[] = {0, 0, 1, 1};
@@ -138,33 +155,27 @@ static void on_display(){
 
             glColor3f(0, 0, 1);
 
-            if(dirX > 0 && dirZ > 0){
-                trX = h*t+xx+1;
-                trY = v*t - (g/2.0)*t*t;
-                trZ = zz;
-            }
-            else if(dirX < 0 && dirZ > 0){
-                trX = xx;
-                trY = v*t - (g/2.0)*t*t;
-                trZ = h*t+zz+1;
-            }
-            else if(dirX < 0 && dirZ < 0){
-                trX = -h*t+xx-1;
-                trY = v*t - (g/2.0)*t*t;
-                trZ = zz;
-            }
-            else{
-                trX = xx;
-                trY = v*t - (g/2.0)*t*t;
-                trZ = -h*t+zz-1;
-            }
-            
-            input.upadUBure(trX, trY, trZ); //Nakon ove racunice mozemo proveriti da li je loptica upala u bure
-            
+            trX = xx;
+            trY = v*t - (g/2.0)*t*t;
+            trZ = h*t+zz+1;
+             
+            double tmp1 = cos((yawyaw)/180*PI)*(h*t+1);
+            double tmp2 = sin((yawyaw)/180*PI)*(h*t+1);
+
+            input.upadUBure(xx + tmp2, trY, zz + tmp1); //Nakon ove racunice mozemo proveriti da li je loptica upala u bure
+
+            //Kompozicija rotacije oko trenutne pozicije
+            glTranslatef(xx, yy, zz);	
+            glRotatef(yawyaw, 0, 1, 0);
+            glTranslatef(-xx, -yy, -zz);
+
+            //kosi hitac
             glTranslatef(trX, trY, trZ);		    
             glutSolidSphere(0.1, 20, 20);
             //--------------------KRAJ ISCRTAVANJA LOPTICE------------------
 		glPopMatrix();
+		
+		//glPopMatrix();
         glDisable(GL_LIGHTING);
         glDisable(GL_LIGHT0);
 	}
@@ -254,6 +265,7 @@ static void on_keyboard(unsigned char key, int x, int y){
 	    	zz = input.retZ();
 	    	dirX = input.retVx();
 	    	dirZ = input.retVz();
+	    	yawyaw = findTheDegree(dirX, dirZ);
 
         	if(isAnimate==0) {isAnimate =1;}
 	        
@@ -295,16 +307,12 @@ static void on_keyboard_up(unsigned char key, int x, int y){
             buttons_list[3] = false;
             break;
         case 'j':
-        	if(buttons_list[4] == true){
-        		input.yawOkretanje(-1.5708); //radijan za 90
-        	}
         	buttons_list[4] = false;
         	break;
+
         case 'l':
-        	if(buttons_list[5] == true){
-        		input.yawOkretanje(1.5708); //radijan 
-        	}
         	buttons_list[5] = false;
+        	break;
 
 
     }
@@ -328,7 +336,12 @@ static void on_timer(int value){
     if(buttons_list[3]){
         input.LevoDesno(-brzinaKretanja);
     }
-
+    if(buttons_list[4] == true){
+        input.yawOkretanje(-0.08); //radijan za 90
+    }
+    if(buttons_list[5] == true){
+        input.yawOkretanje(0.08); //radijan 
+    }
 
     if(isAnimate){
     	t += 1.0;
